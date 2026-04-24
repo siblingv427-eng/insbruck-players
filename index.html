@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>Справочник Мастера · Инсбрукский суд, 1485</title>
+  <!-- Шрифты: Cinzel для заголовков, Cormorant Garamond (Garamond) для текста -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Cormorant Garamond', Garamond, serif;
+      background-color: #0D0D0D;
+      background-image: radial-gradient(circle at 30% 20%, #403B33 0%, #0a0907 100%);
+      min-height: 100vh;
+      padding: 1.8rem 1.2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: #403B33;
+    }
+
+    .container {
+      max-width: 1600px;
+      width: 100%;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .header h1 {
+      font-family: 'Cinzel', serif;
+      font-weight: 600;
+      font-size: 2.2rem;
+      letter-spacing: 2px;
+      color: #D9BFA0;
+      text-shadow: 0 4px 12px #000000, 0 0 0 2px #BF8A49;
+      word-break: break-word;
+    }
+
+    .header .line {
+      width: 140px;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, #BF8A49, #A69677, #BF8A49, transparent);
+      margin: 0.8rem auto 0;
+    }
+
+    .main-content {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.8rem;
+    }
+
+    .grid-section {
+      flex: 3;
+      min-width: 280px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.8rem;
+    }
+
+    /* БЛОК ЗАМЕТОК */
+    .notes-section {
+      flex: 1;
+      min-width: 260px;
+    }
+
+    .notes-card {
+      background: rgba(166, 150, 119, 0.12);
+      backdrop-filter: blur(4px);
+      border: 1.5px solid #BF8A49;
+      border-radius: 24px;
+      padding: 1.6rem 1.4rem;
+      box-shadow: 0 12px 28px -8px #000000, inset 0 0 0 1px #A69677;
+      color: #D9BFA0;
+      transition: box-shadow 0.25s;
+      border-left: 6px solid #BF8A49;
+    }
+
+    .notes-card:hover {
+      box-shadow: 0 18px 32px -8px black, 0 0 0 2px #BF8A49, inset 0 0 0 1px #D9BFA0;
+    }
+
+    .notes-title {
+      font-family: 'Cinzel', serif;
+      font-size: 1.8rem;
+      margin-bottom: 1.2rem;
+      color: #D9BFA0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px dashed #BF8A49;
+      padding-bottom: 8px;
+    }
+
+    .notes-textarea {
+      width: 100%;
+      min-height: 240px;
+      background: rgba(12, 12, 12, 0.7);
+      border: 1px solid #A69677;
+      border-radius: 16px;
+      padding: 1rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      color: #F3E9D2;
+      resize: vertical;
+      margin-bottom: 1rem;
+      line-height: 1.5;
+      backdrop-filter: blur(2px);
+    }
+
+    .notes-textarea:focus {
+      outline: 2px solid #BF8A49;
+      border-color: #D9BFA0;
+    }
+
+    .notes-buttons {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    .notes-btn {
+      font-family: 'Cinzel', serif;
+      background: #403B33;
+      border: 1px solid #BF8A49;
+      color: #D9BFA0;
+      padding: 8px 16px;
+      border-radius: 40px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: 0.2s;
+      box-shadow: 0 2px 5px #00000040;
+    }
+
+    .notes-btn:hover {
+      background: #BF8A49;
+      color: #0D0D0D;
+      border-color: #D9BFA0;
+    }
+
+    .notes-hint {
+      font-size: 0.9rem;
+      color: #c0b19a;
+      font-style: italic;
+      margin-top: 8px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* карточка */
+    .card {
+      background-color: rgba(217, 191, 160, 0.92);
+      backdrop-filter: blur(2px);
+      border-radius: 24px;
+      padding: 1.6rem 1.3rem 1.5rem;
+      box-shadow: 0 15px 30px -6px #000000, inset 0 0 0 1px #A69677;
+      transition: all 0.25s ease;
+      border-left: 6px solid #BF8A49;
+      display: flex;
+      flex-direction: column;
+      opacity: 0;
+      transform: translateY(14px);
+      animation: cardFadeIn 0.5s cubic-bezier(0.2, 0.9, 0.3, 1) forwards;
+      cursor: pointer;
+    }
+
+    .card:nth-child(1) { animation-delay: 0.05s; }
+    .card:nth-child(2) { animation-delay: 0.12s; }
+    .card:nth-child(3) { animation-delay: 0.19s; }
+    .card:nth-child(4) { animation-delay: 0.26s; }
+    .card:nth-child(5) { animation-delay: 0.33s; }
+    .card:nth-child(6) { animation-delay: 0.40s; }
+    .card:nth-child(7) { animation-delay: 0.47s; }
+    .card:nth-child(8) { animation-delay: 0.54s; }
+
+    @keyframes cardFadeIn {
+      0% { opacity: 0; transform: translateY(14px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .card:hover {
+      transform: scale(1.02);
+      box-shadow: 0 22px 36px -8px #000000, 0 0 0 2px #BF8A49, inset 0 0 0 1px #D9BFA0;
+    }
+
+    .card-header {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .icon-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .icon-title span {
+      font-size: 2.7rem;
+      line-height: 1;
+      color: #403B33;
+    }
+
+    .icon-title h2 {
+      font-family: 'Cinzel', serif;
+      font-weight: 600;
+      font-size: 1.7rem;
+      color: #1f1c17;
+      letter-spacing: 0.5px;
+      border-bottom: 2px dashed #BF8A49;
+      padding-bottom: 4px;
+    }
+
+    .short-desc {
+      font-size: 1.15rem;
+      font-weight: 500;
+      margin: 0.4rem 0 1rem;
+      color: #2f2a22;
+      font-style: italic;
+    }
+
+    .expand-toggle {
+      font-family: 'Cinzel', serif;
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #403B33;
+      background: none;
+      border: 1.5px solid #BF8A49;
+      border-radius: 40px;
+      padding: 0.4rem 1.3rem;
+      align-self: flex-start;
+      transition: 0.25s;
+      background-color: rgba(191, 138, 73, 0.15);
+      cursor: pointer;
+      font-weight: 700;
+      margin-top: 2px;
+    }
+
+    .expand-toggle:hover {
+      background-color: #BF8A49;
+      color: #0D0D0D;
+      border-color: #403B33;
+    }
+
+    .card-expanded {
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: max-height 0.55s ease-in-out, opacity 0.35s ease, margin 0.25s;
+      margin-top: 0;
+    }
+
+    .card.expanded .card-expanded {
+      max-height: 2000px;
+      opacity: 1;
+      margin-top: 1.4rem;
+    }
+
+    .rule-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 1rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .rule-table td {
+      padding: 8px 6px;
+      border-bottom: 1px dotted #a69677b0;
+      color: #1f1a14;
+    }
+
+    .rule-table tr:last-child td { border-bottom: none; }
+    .rule-table td:first-child { font-weight: 700; width: 48%; }
+
+    .badge-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 10px 0 5px;
+    }
+
+    .badge {
+      background: #403B33;
+      color: #D9BFA0;
+      padding: 6px 16px;
+      border-radius: 40px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      font-family: 'Cinzel', serif;
+      letter-spacing: 0.8px;
+      border: 1px solid #BF8A49;
+      cursor: pointer;
+      transition: 0.2s;
+      box-shadow: 0 2px 6px #00000040;
+    }
+
+    .badge:hover {
+      background: #BF8A49;
+      color: #0a0907;
+      border-color: #D9BFA0;
+    }
+
+    .collapse-btn {
+      background: transparent;
+      border: 1.5px solid #403B33;
+      color: #1f1a14;
+      font-family: 'Cinzel', serif;
+      font-size: 0.85rem;
+      padding: 5px 16px;
+      border-radius: 40px;
+      cursor: pointer;
+      align-self: flex-start;
+      margin-top: 8px;
+      transition: 0.2s;
+      font-weight: 600;
+    }
+
+    .collapse-btn:hover {
+      background: #403B33;
+      color: #D9BFA0;
+      border-color: #BF8A49;
+    }
+
+    /* попап */
+    .popup-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background-color: rgba(0,0,0,0.5);
+      backdrop-filter: blur(3px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s;
+    }
+
+    .popup-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .popup-card {
+      background: #D9BFA0;
+      max-width: 520px;
+      width: 90%;
+      max-height: 85vh;
+      overflow-y: auto;
+      border-radius: 28px;
+      box-shadow: 0 40px 60px -10px black, 0 0 0 2px #BF8A49, inset 0 0 0 1px #A69677;
+      padding: 2rem 1.6rem;
+      color: #0D0D0D;
+      position: relative;
+      font-family: 'Cormorant Garamond', serif;
+      transform: scale(0.9);
+      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+      border-left: 10px solid #403B33;
+    }
+
+    .active .popup-card { transform: scale(1); }
+    .popup-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      font-family: 'Cinzel', serif;
+    }
+    .popup-header h3 { font-size: 1.8rem; font-weight: 700; color: #1a1510; }
+    .popup-close {
+      background: none; border: none; font-size: 2.4rem; cursor: pointer;
+      color: #403B33; transition: 0.15s; line-height: 1;
+    }
+    .popup-close:hover { color: #0D0D0D; transform: scale(1.15); }
+    .popup-content { font-size: 1.1rem; line-height: 1.5; }
+    .popup-content ul, .popup-content ol { padding-left: 1.8rem; margin: 0.8rem 0; }
+    .popup-content table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+    .popup-content td { padding: 8px 4px; border-bottom: 1px dashed #403B33; }
+
+    .footer {
+      text-align: center;
+      margin-top: 2.5rem;
+      color: #D9BFA0;
+      font-size: 1.3rem;
+      font-style: italic;
+      border-top: 2px solid #BF8A49;
+      padding-top: 2rem;
+      font-weight: 400;
+      text-shadow: 0 2px 5px black;
+    }
+    .footer span { font-size: 2rem; margin-left: 8px; font-style: normal; }
+
+    /* адаптив */
+    @media (max-width: 1100px) {
+      .grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 800px) {
+      .main-content { flex-direction: column; }
+      .grid { grid-template-columns: 1fr; }
+      body { padding: 1rem 0.8rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>⚖︎ Справочник Мастера<br>«Инсбрукский суд, 1485»</h1>
+    <div class="line"></div>
+  </div>
+
+  <div class="main-content">
+    <!-- Сетка карточек -->
+    <div class="grid-section">
+      <div class="grid" id="cardGrid"></div>
+    </div>
+
+    <!-- Блок с заметками -->
+    <div class="notes-section">
+      <div class="notes-card">
+        <div class="notes-title"><span>✎</span> Заметки Мастера</div>
+        <textarea id="masterNotes" class="notes-textarea" placeholder="Введите заметки... Например: цели игроков, оставшееся время, важные события, репутация персонажей."></textarea>
+        <div class="notes-buttons">
+          <button class="notes-btn" id="saveNotesBtn">📥︎ Сохранить</button>
+          <button class="notes-btn" id="clearNotesBtn">⛌ Очистить</button>
+        </div>
+        <div class="notes-hint">
+          <span>🔓︎</span> Заметки сохраняются только в этом браузере и на этом устройстве.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    «Слова имеют вес. Слухи решают судьбы. Истина — в твоих руках.» <span>⚖︎</span>
+  </div>
+</div>
+
+<!-- Мини-попап -->
+<div class="popup-overlay" id="popupOverlay">
+  <div class="popup-card" id="popupCard">
+    <div class="popup-header">
+      <h3 id="popupTitle">📜 Заголовок</h3>
+      <button class="popup-close" id="popupCloseBtn">&times;</button>
+    </div>
+    <div class="popup-content" id="popupContent">…</div>
+  </div>
+</div>
+
+<script>
+  (function(){
+    // ---------- РАСШИРЕННЫЕ ДАННЫЕ КАРТОЧЕК (8 штук) ----------
+    const cardsData = [
+      { // 0: Базовые механики
+        icon: '♤', title: 'Базовые механики',
+        short: 'Броски d20, модификаторы, характеристики, вдохновение, социальный урон.',
+        table: [
+          ['Проверка характеристики','1d20 + модификатор +2 (если владеете навыком)'],
+          ['Состязание','Оба бросают d20, побеждает больший результат'],
+          ['Преимущество','Бросок дважды, выбор лучшего'],
+          ['Помеха','Бросок дважды, выбор худшего'],
+          ['Репутация (нач. 10)','Теряется при разоблачении лжи (2d4), публичном проигрыше (1d4). Восстанавливается благородным поступком (1d4).'],
+          ['Влияние (3–8)','Зависит от статуса. При падении до 0 теряются связи и привилегии.'],
+        ],
+        badges: [
+          { label: '📈︎ Сложность (DC)', popupTitle: 'Сложность проверок', 
+            content: '<table><tr><td>Легко</td><td>10</td></tr><tr><td>Средне</td><td>15</td></tr><tr><td>Трудно</td><td>20</td></tr><tr><td>Очень трудно</td><td>25</td></tr></table><p style="margin-top:10px;"><strong>Модификаторы характеристик:</strong> 1-3 (-3), 4-5 (-2), 6-7 (-1), 8-12 (0), 13-14 (+1), 15-16 (+2), 17-18 (+3), 19-20 (+4).</p>' },
+          { label: '✦ Вдохновение', popupTitle: 'Когда давать вдохновение', 
+            content: '<p>За яркий отыгрыш характера, драматический риск, находчивость, помощь товарищам. Вдохновение даёт преимущество на один бросок и не накапливается бесконечно. Мастер может награждать в ключевые моменты. Примеры: игрок пожертвовал выгодой ради принципов персонажа; рискнул репутацией ради правды; нашёл неожиданный выход из тупика.</p>' },
+          { label: '⚖︎ Репутация и влияние', popupTitle: 'Социальный урон', 
+            content: '<strong>Потеря репутации:</strong><ul><li>Публичное разоблачение лжи — 2d4</li><li>Проигрыш в состязании с важным лицом (тет-а-тет) — 1d4</li><li>Проигрыш прилюдно — 2d4</li><li>Признание в недостойном поступке — 1d6</li></ul><strong>Потеря влияния:</strong><ul><li>Крупный проигрыш в суде — 1d6</li><li>Раскрытие компрометирующей тайны — 1d6</li><li>Потеря поддержки покровителя — 2d6</li></ul>' },
+          { label: '☼ Преимущество/помеха', popupTitle: 'Преимущество и помеха', 
+            content: '<p><strong>Преимущество</strong> — бросок дважды, выбор лучшего. Даётся при наличии убедительных доказательств, поддержки влиятельного лица или хорошей подготовке. <strong>Помеха</strong> — бросок дважды, выбор худшего. Возникает при спешке, недоверии, плохой репутации или клевете. Если на персонажа действует и преимущество, и помеха, они нейтрализуют друг друга.</p>' }
+        ]
+      },
+      { // 1: Слухи
+        icon: '👂︎', title: 'Слухи',
+        short: 'Разыгрывание, проверка, продажа, последствия лжи и кража карточек.',
+        table: [
+          ['Разыграть слух','Харизма (Убеждение), СЛ 12. Успех — слух идёт в народ. Провал — не распространяется.'],
+          ['Проверить слух','Интеллект (Анализ) или Мудрость (Проницательность), СЛ 12. Мастер говорит: правда, ложь или искажение.'],
+          ['Продать слух','3 пфеннига (если не разыгран). Проверка Харизмы СЛ 10–15.'],
+          ['Передать слух','Без броска — отдать карточку другому игроку.'],
+          ['Украсть карточку','Ловкость (Скрытность) против Мудрости (Внимательность). При провале — потеря 1d6 репутации.'],
+          ['Ложь доказана','Потеря 1d6 репутации + помеха на все проверки Харизмы до конца игры.'],
+          ['Три слуха о персонаже','Если о ком-то ходит 3+ слуха — помеха на все его проверки Харизмы.']
+        ],
+        badges: [
+          { label: '🗲︎ Крит. провал', popupTitle: 'Критический провал слуха', 
+            content: '<p>Потеря 1d4 репутации, слух не распространяется. В городе могут посмеяться над рассказчиком. Если слух был особенно нелепым, Мастер может наложить дополнительные штрафы.</p>' },
+          { label: '웃 Три слуха', popupTitle: 'Когда слухов слишком много', 
+            content: '<p>Если об одном персонаже циркулирует три и более слуха (независимо от их правдивости), он получает помеху на все проверки Харизмы. Люди уже предубеждены против него. Это правило действует до тех пор, пока персонаж не опровергнет хотя бы один слух публично.</p>' },
+          { label: '⊶ Список слухов', popupTitle: 'Основные слухи (28 шт.)', 
+            content: '<p><strong>Обвинения в колдовстве:</strong> Бербель угрожала служанке; Хелена отравила рыцаря; Кнёллин ослепила мужа; варили голову покойника; проклятие на свадьбе; гончар-любовник; Бербель учила колдовству.</p><p><strong>Процедурные:</strong> епископ не верит в магию; эрцгерцог недоволен; арест до суда; свидетели без присяги; подкуп свидетелей.</p><p><strong>Социальные:</strong> Маргарету уволили за воровство; у Хелены есть покровитель; лекарь-отравитель; судья берёт взятки; инквизитор учился колдовству в Италии.</p>' },
+          { label: '◎ Мастеру: отыгрыш', popupTitle: 'Как водить слухи', 
+            content: '<p>Подкидывайте обрывки фраз, намёки. Используйте слухи как «крючки». После нескольких часов объявляйте текущее время и новые слухи. Заканчивайте занятия на клиффхэнгере, связанном со слухами: <em>«Вы слышите, как за углом шепчутся двое: „Инквизитор нашёл новую улику, говорят, она всё изменит...“»</em></p>' }
+        ]
+      },
+      { // 2: Улики
+        icon: '⌕', title: 'Улики',
+        short: 'Типы улик, поиск, допрос, подделка, кража и использование в суде.',
+        table: [
+          ['Прямая улика','Сильно склоняет судью (восковая фигура, письмо с угрозами).'],
+          ['Косвенная улика','+1-2 к проверке Харизмы в суде (странный порошок, показания без доказательств).'],
+          ['Опровергающая','Отменяет одну прямую улику противника.'],
+          ['Найти улику','Мудрость (Внимательность) или Интеллект (Анализ), СЛ 5–20.'],
+          ['Допросить свидетеля','Харизма (Убеждение) или Запугивание, СЛ 10–15.'],
+          ['Украсть улику','Ловкость (Скрытность) vs Мудрость цели. При провале потеря 1d6 репутации.'],
+          ['Подделать улику','Интеллект (Анализ/Обман), СЛ 15. Подделка действует как косвенная улика.'],
+          ['Уничтожить улику','Требуется физический доступ. Если вскроется — потеря 1d6 репутации.']
+        ],
+        badges: [
+          { label: '⌕ Сложность поиска', popupTitle: 'Где искать и сложность', 
+            content: '<p><strong>Сложность:</strong> 5 — на виду; 10 — спрятано, но есть подсказка; 15+ — тщательно спрятано.</p><p><strong>Локации:</strong> Таверна, Рыночная площадь, Канцелярия, Тюрьма, Церковь, Дом инквизитора.</p>' },
+          { label: '⏍ Все 9 улик', popupTitle: 'Список улик', 
+            content: '<ol><li>Восковая фигура</li><li>Странный порошок в подушке</li><li>Показания итальянского лекаря</li><li>Письмо епископа Гользера</li><li>Показания гончара</li><li>Кусок льна из дома Пфлиглин</li><li>Записка с угрозами от Маргареты</li><li>Заявление о процедурных нарушениях (5 пунктов)</li><li>Протоколы допросов</li></ol>' },
+          { label: '👤︎ Подделка', popupTitle: 'Как подделать улику', 
+            content: '<p>Проверка Интеллекта (Анализ или Обман), СЛ 15. Успех — поддельная улика готова. В суде может быть опровергнута встречной проверкой Интеллекта (Анализ) СЛ 15. Провал — подделка раскрыта сразу, потеря 1d6 репутации. Критический провал — подделка настолько плоха, что обвинитель сам попадает под подозрение.</p>' },
+          { label: '⍝ Мастеру: тайники', popupTitle: 'Где прятать улики', 
+            content: '<p>За алтарём, в подкладке камзола, в книге счетов, в дупле дерева, под половицей, в тайнике камина, среди трав лекаря, в двойном дне сундука, зашито в подушку.</p>' }
+        ]
+      },
+      { // 3: Козыри
+        icon: '♧', title: 'Козыри',
+        short: 'Уникальные способности 13 архетипов. Одноразовые, кроме постоянных.',
+        table: [
+          ['Инквизитор','Папская булла: арест, отвод судьи, доступ к документам.'],
+          ['Защитник','Финансовая поддержка: до 10 пф, покупка документа, наём свидетеля.'],
+          ['Представитель эрцгерцога','Воля эрцгерцога: отложить заседание, исключить улику.'],
+          ['Городской советник','Авторитет власти: поручительство совета (+2 репутации), давление на чиновника.'],
+          ['Местный священник','Авторитет церкви: доступ к записям, призвать к совести (помеха на Обман).'],
+          ['Итальянский лекарь','Медицинский авторитет: заключение в суде, скрытое отравление.'],
+          ['Тавернщик','Все заходят к вам: узнать правдивость слуха, бесплатный слух.'],
+          ['Богатый покровитель','Доступ к эрцгерцогу: подкуп, письмо с приказом.'],
+          ['Ремесленник','Поддержка цеха: клятва мастеров, 10 пф от цеха.'],
+          ['Обвиняемые','Тайны знати/соседей: шантаж, продажа, публичное разоблачение.'],
+          ['Свидетельница','Убеждённость жертвы: усилить слух, вызвать сострадание.'],
+          ['Судья','Судебная власть: отклонить аргумент, признать улику недопустимой.']
+        ],
+        badges: [
+          { label: '⊶ Все 14 архетипов', popupTitle: 'Список архетипов и козырей', 
+            content: '<p>Инквизитор, Защитник, Представитель эрцгерцога, Городской советник, Местный священник, Итальянский лекарь, Тавернщик, Богатый покровитель, Ремесленник, Хелена Шоберин, Бербель Хиффайзен, Маргарета Грюнепахин, Судья. У каждого свой козырь (см. карточку).</p>' },
+          { label: '⚔︎ Кража козыря', popupTitle: 'Можно ли украсть козырь', 
+            content: '<p>Только материальный козырь (папская булла, письмо, документы). Проверка Ловкости (Скрытность) против Мудрости (Внимательность) владельца. При успехе козырь переходит к вору. Информационные и социальные козыри украсть нельзя, но можно дискредитировать, если узнать секрет и публично его разоблачить.</p>' },
+          { label: '† Одноразовые и постоянные', popupTitle: 'Типы козырей', 
+            content: '<p><strong>Материальные</strong> (булла, письмо) — можно украсть, использовать один раз.</p><p><strong>Информационные</strong> (тайна) — передаются, используются один раз.</p><p><strong>Социальные</strong> (авторитет) — неотделимы от персонажа, но могут быть ослаблены.</p><p><strong>Профессиональные</strong> (медицинский авторитет) — действуют постоянно, но могут быть дискредитированы.</p>' },
+          { label: '?︎ Мастеру: забыли', popupTitle: 'Напомнить о козырях', 
+            content: '<p>Перед судом скажите: «Ваши козыри могут переломить ход дела». Приведите пример использования. Убедитесь, что игроки понимают: козырь срабатывает автоматически, если ситуация подходит. Неиспользованный козырь сгорает в конце игры.</p>' }
+        ]
+      },
+      { // 4: Деньги и услуги
+        icon: '$', title: 'Деньги и услуги',
+        short: 'Пфенниги, стартовое богатство, цены на всё и подкуп.',
+        table: [
+          ['Купить слух','3 пфеннига'],
+          ['Купить косвенную улику','3–5 пф'],
+          ['Купить прямую улику','6–10 пф'],
+          ['Купить документ','10–15 пф'],
+          ['Нанять глашатая','4 пф'],
+          ['Нанять свидетеля','3–5 пф'],
+          ['Подкупить стражника','1–2 пф'],
+          ['Подкупить писаря','3–5 пф'],
+          ['Доступ к документам','1–3 пф'],
+          ['Лечение у лекаря','2 пф']
+        ],
+        badges: [
+          { label: '⍟ Стартовое богатство', popupTitle: 'Начальное богатство по архетипам', 
+            content: '<table><tr><td>Инквизитор</td><td>7 пф</td></tr><tr><td>Защитник</td><td>5 пф (+ доступ)</td></tr><tr><td>Представитель эрцгерцога</td><td>10 пф</td></tr><tr><td>Советник</td><td>10 пф</td></tr><tr><td>Священник</td><td>5 пф</td></tr><tr><td>Лекарь</td><td>5 пф</td></tr><tr><td>Тавернщик</td><td>5 пф</td></tr><tr><td>Покровитель</td><td>10 пф</td></tr><tr><td>Ремесленник</td><td>3 пф</td></tr><tr><td>Обвиняемые</td><td>2 пф</td></tr><tr><td>Свидетельница</td><td>3 пф</td></tr><tr><td>Судья</td><td>8 пф</td></tr></table>' },
+          { label: '⍟ Цены на козыри', popupTitle: 'Торговля козырями', 
+            content: '<p>Материальный козырь (булла, письмо): покупка 6–12 пф, продажа NPC 4–8 пф. Информационный козырь (тайна): покупка 4–8 пф, продажа 3–6 пф. Постоянные козыри не продаются.</p>' },
+          { label: '⚖︎ Мастеру: торг', popupTitle: 'Как торговаться', 
+            content: '<p>Проверка Харизмы (Убеждение) СЛ 10–15. Успех — скидка ~20% или более выгодная цена. Провал — сделка срывается. Критический провал — покупатель сообщает властям, потеря 1d4 репутации.</p>' },
+          { label: '£ Подкуп', popupTitle: 'Кого и за сколько', 
+            content: '<ul><li>Слуга/стражник низшего ранга — 1–2 пф.</li><li>Писарь/стражник с доступом — 3–5 пф.</li><li>Чиновник/судейский помощник — 6–8 пф.</li><li>Судья/высокопоставленный — 10+ пф (крайне рискованно).</li></ul><p>Подкуп не гарантирует успех, может обернуться разоблачением.</p>' }
+        ]
+      },
+      { // 5: Хронометраж
+        icon: '⏲', title: 'Хронометраж',
+        short: 'Ваншот 2–2,5 ч, серия 3×2 ч, внутриигровое время 12 часов.',
+        table: [
+          ['Ваншот','2–2,5 часа: орг.момент 5-10 мин → свободная фаза 45-60 мин → суд 30-40 мин → рефлексия 10-15 мин.'],
+          ['Серия занятий','3×2 часа. Занятие 1: слухи и знакомство. Занятие 2: улики и интриги. Занятие 3: суд и развязка.'],
+          ['Внутриигровое время','Лимит 12 часов (с 6:00 до 18:00). Каждое значимое действие = 1 час.'],
+          ['Действия (1 час)','Посещение локации, поиск улики, допрос, разыгрывание слуха, торговля, кража, перемещение между районами.'],
+          ['Быстрые действия','Короткий разговор с игроком, передача предмета, использование козыря — 0 часов.'],
+          ['Трекер','Шкала из 12 делений или жетоны. Мастер объявляет время каждые 3-4 часа.']
+        ],
+        badges: [
+          { label: '⏱︎ Ваншот детально', popupTitle: 'Хронометраж ваншота', 
+            content: '<ol><li>Орг.момент (5-10 мин) — легенда, раздача карточек.</li><li>Свободная фаза (45-60 мин) — слухи, поиск улик, союзы.</li><li>Сбор на суд (5 мин).</li><li>Судебное заседание (30-40 мин).</li><li>Вынесение приговора (5-10 мин).</li><li>Рефлексия (10-15 мин).</li></ol>' },
+          { label: '⟳ Серия занятий', popupTitle: 'Детали серии', 
+            content: '<p><strong>Занятие 1 (2 ч):</strong> введение, исторический экскурс, слухи, 2-3 локации.</p><p><strong>Занятие 2 (2 ч):</strong> активный поиск улик, допросы, интриги, события-триггеры.</p><p><strong>Занятие 3 (2 ч):</strong> суд (1 ч 15 мин), приговор, рефлексия 30 мин.</p>' },
+          { label: '🗓︎ Внутриигровое время', popupTitle: 'Система 12 часов', 
+            content: '<p>1 действие = 1 час. Лимит 12 часов до суда. Мастер ведёт трекер.</p><p><strong>События по времени:</strong> 9:00 — глашатай; 12:00 — возможны новые аресты; 15:00 — доступ к документам; 17:00 — NPC расходятся; 18:00 — начало суда.</p>' },
+          { label: '🛎︎ Маячки времени', popupTitle: 'Реплики для Мастера', 
+            content: '<ul><li>«Солнце уже высоко. Около 9 утра. До суда 9 часов.»</li><li>«Полдень. Площадь заполнена народом. Осталось 6 часов.»</li><li>«Близится вечер. Тени удлиняются. Суд через 3 часа.»</li><li>«Стражники зажигают факелы. До суда меньше часа!»</li></ul>' }
+        ]
+      },
+      { // 6: Персонажи
+        icon: '웃', title: 'Персонажи и архетипы',
+        short: '14 готовых ролей: цели, секреты, влияние, козыри.',
+        table: [
+          ['Инквизитор','Обвинитель, влияние 8. Козырь: Папская булла.'],
+          ['Защитник','Защита, влияние 6. Козырь: Финансовая поддержка.'],
+          ['Представитель','Наблюдатель, влияние 7. Козырь: Воля эрцгерцога.'],
+          ['Советник','Самоуправление, влияние 6. Козырь: Авторитет власти.'],
+          ['Священник','Церковный авторитет, влияние 5. Козырь: Авторитет церкви.'],
+          ['Лекарь','Эксперт, влияние 4. Козырь: Медицинский авторитет.'],
+          ['Тавернщик','Источник слухов, влияние 4. Козырь: Все заходят к вам.'],
+          ['Покровитель','Тайный спонсор, влияние 7. Козырь: Доступ к эрцгерцогу.'],
+          ['Ремесленник','Представитель цеха, влияние 5. Козырь: Поддержка цеха.'],
+          ['Хелена Шоберин','Главная обвиняемая, влияние 3. Козырь: Тайны знати.'],
+          ['Бербель','Обвиняемая-соседка, влияние 3. Козырь: Соседские тайны.'],
+          ['Маргарета','Свидетельница, влияние 4. Козырь: Убеждённость жертвы.'],
+          ['Судья','Председатель, влияние 8. Козырь: Авторитет судебной власти.']
+        ],
+        badges: [
+          { label: '☑︎ Все архетипы', popupTitle: '14 архетипов подробно', 
+            content: '<p><strong>Инквизитор</strong> — обвинитель, цель осудить 3+ женщин. <strong>Защитник</strong> — добиться оправдания через процедурные нарушения. <strong>Представитель</strong> — не допустить скандала. <strong>Советник</strong> — сохранить стабильность. <strong>Священник</strong> — защитить паству. <strong>Лекарь</strong> — подтвердить колдовство/отравление. <strong>Тавернщик</strong> — заработать на информации. <strong>Покровитель</strong> — спасти любовницу тайно. <strong>Ремесленник</strong> — спасти жену. <strong>Обвиняемые</strong> — доказать невиновность. <strong>Свидетельница</strong> — месть. <strong>Судья</strong> — справедливый приговор.</p>' },
+          { label: '◬ Соц. группы', popupTitle: 'Создание своего персонажа', 
+            content: '<p>Доступные группы: духовенство, дворянство/рыцарство, городская знать (патриции), ремесленники, торговцы, медики, служилые люди, горожане, женщины, маргиналы. Влияние 3–8. Нельзя: члены семьи эрцгерцога, маги, случайные проезжие.</p>' },
+          { label: '웃웃 Состав группы', popupTitle: 'Рекомендуемый состав', 
+            content: '<p>6 игроков: инквизитор, защитник, представитель, 1 обвиняемая, 1 свидетель, судья. 7-8: + вторая обвиняемая, советник/священник. 9-10: + лекарь, тавернщик, покровитель. 11-12: + второй свидетель, ремесленник.</p>' },
+          { label: '⚿ Секреты и цели', popupTitle: 'Скрытая информация', 
+            content: '<p>У каждого архетипа есть личная цель и секрет. Инквизитор знает о слабости обвинения. Защитник нанят покровителем. Представитель знает о связи покровителя с Хеленой. Обвиняемые знают компромат. Всё это создаёт драму и интригу.</p>' }
+        ]
+      },
+      { // 7: Документы
+        icon: '⎘', title: 'Документы и записи',
+        short: 'Церковные, городские и придворные документы.',
+        table: [
+          ['Письмо епископа','Сомнение в ведьмах, призыв к мягкости.'],
+          ['Письмо эрцгерцогу','Строгость для убийц, остальным штрафы.'],
+          ['Церковная запись','Смерть Шписса в доме Хелены.'],
+          ['Протокол Маргареты','Бербель угрожала, после увольнения болезнь.'],
+          ['Протокол лекаря','Смерть после обеда у Шоберин, не яд.'],
+          ['Протокол Гертруды','Восковая фигура под порогом.'],
+          ['Издержки','Содержание заключённых, оплата нотариуса.'],
+          ['Письмо эрцгерцога','Просьба прислать комиссара.'],
+          ['Жалоба горожан','47 подписей против инквизитора.'],
+          ['Письмо защитника','5 процедурных нарушений.'],
+          ['Решение суда','Процесс недействителен, освобождение.'],
+          ['Каноническое право','Свидетели без присяги недействительны.']
+        ],
+        badges: [
+          { label: '◱ Тексты документов', popupTitle: 'Полные тексты', 
+            content: '<p><strong>Письмо епископа:</strong> «Меня крайне удивляет... ваша помощь более не нужна».</p><p><strong>Протокол Маргареты:</strong> «Бербель говорила: зажму большой палец — судьи ничего не сделают».</p><p><strong>Протокол лекаря:</strong> «Я предупреждал: теперь ты никогда не будешь знать покоя».</p><p><strong>Жалоба:</strong> «Смута и раздор, аресты без суда, свидетели не присягают».</p>' },
+          { label: '⚖︎ Нарушения', popupTitle: '5 нарушений инквизитора', 
+            content: '<ol><li>Арест до начала законного разбирательства.</li><li>Свидетели не присягали и не вызваны.</li><li>Имена свидетелей скрыты.</li><li>Нотариус отсутствовал.</li><li>Вопросы вне компетенции.</li></ol>' },
+          { label: '📖︎ Каноническое право', popupTitle: 'Выдержки', 
+            content: '<ul><li>«Свидетели без присяги не имеют законной силы».</li><li>«Никто не может быть лишён свободы без суда».</li><li>«В сомнительных случаях — в пользу обвиняемого».</li><li>«Пытки — только при сильных уликах и не более двух раз».</li></ul>' },
+          { label: '◬ Исторический исход', popupTitle: 'Реальный процесс 1485', 
+            content: '<p>В реальности инквизитор Крамер потерпел поражение. Епископ Гользер и эрцгерцог Сигизмунд вмешались, процесс признали недействительным из-за процедурных нарушений. Женщины были освобождены под поручительство. Инквизитор покинул Инсбрук и позже написал «Молот ведьм».</p>' }
+        ]
+      }
+    ];
+
+    const grid = document.getElementById('cardGrid');
+    const popupOverlay = document.getElementById('popupOverlay');
+    const popupTitle = document.getElementById('popupTitle');
+    const popupContent = document.getElementById('popupContent');
+    const popupCloseBtn = document.getElementById('popupCloseBtn');
+
+    function renderCards() {
+      let html = '';
+      cardsData.forEach((card, idx) => {
+        html += `
+          <div class="card" data-card-index="${idx}">
+            <div class="card-header">
+              <div class="icon-title">
+                <span>${card.icon}</span>
+                <h2>${card.title}</h2>
+              </div>
+              <div class="short-desc">${card.short}</div>
+              <div class="expand-toggle" data-action="expand">▼ Развернуть</div>
+            </div>
+            <div class="card-expanded">
+              <table class="rule-table">
+                ${card.table.map(row => `<tr><td>${row[0]}</td><td>${row[1]}</td></tr>`).join('')}
+              </table>
+              <div class="badge-group">
+                ${card.badges.map((b, i) => 
+                  `<span class="badge" data-badge-index="${i}" data-card="${idx}">${b.label}</span>`
+                ).join('')}
+              </div>
+              <button class="collapse-btn" data-action="collapse">▲ Свернуть</button>
+            </div>
+          </div>
+        `;
+      });
+      grid.innerHTML = html;
+    }
+    renderCards();
+
+    grid.addEventListener('click', (e) => {
+      const card = e.target.closest('.card');
+      if (!card) return;
+      const expandBtn = e.target.closest('[data-action="expand"]');
+      const collapseBtn = e.target.closest('[data-action="collapse"]');
+      
+      if (expandBtn && !card.classList.contains('expanded')) {
+        document.querySelectorAll('.card.expanded').forEach(c => c.classList.remove('expanded'));
+        card.classList.add('expanded');
+        e.stopPropagation();
+        return;
+      }
+      if (collapseBtn) {
+        card.classList.remove('expanded');
+        e.stopPropagation();
+        return;
+      }
+      const badge = e.target.closest('.badge');
+      if (badge) {
+        e.stopPropagation();
+        const cardIdx = badge.dataset.card;
+        const badgeIdx = badge.dataset.badgeIndex;
+        if (cardIdx !== undefined && badgeIdx !== undefined) {
+          const badgeData = cardsData[cardIdx].badges[badgeIdx];
+          openPopup(badgeData.popupTitle, badgeData.content);
+        }
+        return;
+      }
+      if (!card.classList.contains('expanded')) {
+        document.querySelectorAll('.card.expanded').forEach(c => c.classList.remove('expanded'));
+        card.classList.add('expanded');
+      }
+    });
+
+    function openPopup(title, content) {
+      popupTitle.innerHTML = title;
+      popupContent.innerHTML = content;
+      popupOverlay.classList.add('active');
+    }
+    function closePopup() { popupOverlay.classList.remove('active'); }
+    popupCloseBtn.addEventListener('click', closePopup);
+    popupOverlay.addEventListener('click', (e) => { if (e.target === popupOverlay) closePopup(); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closePopup(); });
+    document.querySelector('.popup-card').addEventListener('click', (e) => e.stopPropagation());
+
+    // ---------- ЛОГИКА ЗАМЕТОК (localStorage) ----------
+    const notesTextarea = document.getElementById('masterNotes');
+    const saveBtn = document.getElementById('saveNotesBtn');
+    const clearBtn = document.getElementById('clearNotesBtn');
+    const STORAGE_KEY = 'insbrukMasterNotes';
+
+    function loadNotes() {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved !== null) {
+        notesTextarea.value = saved;
+      }
+    }
+
+    function saveNotes() {
+      localStorage.setItem(STORAGE_KEY, notesTextarea.value);
+      alert('✓ Заметки сохранены в этом браузере');
+    }
+
+    function clearNotes() {
+      if (confirm('Удалить все заметки?')) {
+        notesTextarea.value = '';
+        localStorage.removeItem(STORAGE_KEY);
+      }
+    }
+
+    saveBtn.addEventListener('click', saveNotes);
+    clearBtn.addEventListener('click', clearNotes);
+    loadNotes();
+  })();
+</script>
+</body>
+</html>
